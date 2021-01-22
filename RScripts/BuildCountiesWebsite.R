@@ -75,3 +75,5 @@ for (i in counties) {
   # render the document
   rmarkdown::render(template, output_file = htmlfile, params = list(data = i))
 }
+
+

@@ -91,10 +91,10 @@ daily_deaths <- cbind(TotalDeaths = c(0,daily_deaths))
 hospitalizations <- last(covid_county$hospitalization)
 
 # 30 day highest case
-highest_30day_cases <- max(daily_cases[(length(daily_cases)-30):length(daily_cases)])
+#highest_30day_cases <- max(daily_cases[(length(daily_cases)-30):length(daily_cases)])
 
 # 30 day highest deaths
-highest_30day_deaths <- max(daily_deaths[(length(daily_deaths)-30):length(daily_deaths)])
+#highest_30day_deaths <- max(daily_deaths[(length(daily_deaths)-30):length(daily_deaths)])
 ```
 
 <!--CUSTOM CSS-->
@@ -261,23 +261,38 @@ bar_hospitilization <- ggplotly(bar_hospitilization) %>%
   partial_bundle()
 
 bar_hospitilization
+
+# 30 day highest case -- use avg
+highest_30day_cases <- max(seven_case_avg[(length(seven_case_avg)-30):length(seven_case_avg)])
+
+# 30 day highest deaths -- use avg
+highest_30day_deaths <- max(seven_death_avg[(length(seven_death_avg)-30):length(seven_death_avg)])
+
+highest_30day_cases <- round(highest_30day_cases, 1)
+highest_30day_deaths <- round(highest_30day_deaths, 1)
+
 ```
 
 Row {data-height=150px}
 -----------------------------------------------------------------------
-### Latest Daily Cases (30 day high = `r highest_30day_cases`)
+### Latest Daily Cases (30 day high of 7 day avg = `r highest_30day_cases`)
 
 ```{r, echo=FALSE, message=FALSE}
-previous_daily_case <- daily_cases[length(daily_cases)]
+
+previous_daily_case <- seven_case_avg[length(seven_case_avg)]
+previous_daily_case <- round(previous_daily_case, 1)
 gauge(previous_daily_case, min = 0, max = highest_30day_cases, symbol = '', gaugeSectors(
 success = c(0,highest_30day_cases), colors=c("primary")
 ))
+
+
 ```
 
-### Latest Daily Deaths (30 day high = `r highest_30day_deaths`)
+### Latest Daily Deaths (30 day high of 7 day avg = `r highest_30day_deaths`)
 
 ```{r, echo=FALSE, message=FALSE}
-previous_daily_deaths <- daily_deaths[length(daily_deaths)]
+previous_daily_deaths <- seven_death_avg[length(seven_death_avg)]
+previous_daily_deaths <- round(previous_daily_deaths, 1)
 gauge(previous_daily_deaths, min = 0, max = highest_30day_deaths, symbol = '', gaugeSectors(
 success = c(0, highest_30day_deaths),colors = c("black")
 ))

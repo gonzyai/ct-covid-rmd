@@ -36,6 +36,12 @@ library(hrbrthemes)
 library(knitr)
 library(zoo) # moving averages
 
+#functions
+gg_color_hue <- function(n) {
+  hues = seq(15, 375, length = n + 1)
+  hcl(h = hues, l = 65, c = 100)[1:n]
+}
+
 # get the data - leave for quick testing one file
 load("../data/covid.RData")
 
@@ -109,14 +115,16 @@ window.onload = function () {
 ### *This page contains COVID-19 information for the 8 Counties in CT from `r beginDate ` to `r lastDate`.*
 </div>
 
-Row {data-height=700px}
+Row {data-height=500px}
 ----------------------------------------------------------------------
 
 ### **Total Cases per County**
 
 ```{r, echo=FALSE, message=FALSE}
-tcc <- ggplot(data = covid_mr, aes(x=county, y = CasesPer100K, fill = county)) +
-  geom_bar(stat = "identity") + labs(x = "", y = "Total Cases (Per 100K)") + theme_classic() +
+cbPalette <- gg_color_hue(length(covid_mr$county))
+
+tcc <- ggplot(data = covid_mr, aes(x=county, y = CasesPer100K)) +
+  geom_bar(stat = "identity", fill = cbPalette) + labs(x = "", y = "Total Cases (Per 100K)") + theme_classic() +
   theme(legend.position = "none") + theme(axis.text.x=element_text(angle = 45, hjust = 0.9, size = 11))
 
 ggplotly(tcc, dynamicTicks = TRUE) %>% 
@@ -127,8 +135,8 @@ ggplotly(tcc, dynamicTicks = TRUE) %>%
 ### **Total Deaths per County**
 
 ```{r, echo=FALSE, message=FALSE}
-tdc <- ggplot(data = covid_mr, aes(x=county, y = DeathsPer100K, fill = county)) +
-  geom_bar(stat = "identity") + labs(x = "", y = "Total Deaths (Per 100K)") + theme_classic() +
+tdc <- ggplot(data = covid_mr, aes(x=county, y = DeathsPer100K)) +
+  geom_bar(stat = "identity", fill = cbPalette) + labs(x = "", y = "Total Deaths (Per 100K)") + theme_classic() +
   theme(legend.position = "none") + theme(axis.text.x=element_text(angle = 45, hjust = 0.9, size = 11))
 
 ggplotly(tdc, dynamicTicks = TRUE) %>% 
@@ -136,7 +144,7 @@ ggplotly(tdc, dynamicTicks = TRUE) %>%
   layout(xaxis=list(fixedrange=TRUE), yaxis=list(fixedrange=TRUE))
 ```
 
-Row {data-height=800px}
+Row {data-height=500px}
 ----------------------------------------------------------------------
 
 ### **County Hospitalizations Over Time**
@@ -152,7 +160,7 @@ ggplotly(hot, dynamicTicks = TRUE) %>%
   layout(xaxis=list(fixedrange=TRUE), yaxis=list(fixedrange=TRUE))
 ```
 
-Row {data-height=700px}
+Row {data-height=500px}
 ----------------------------------------------------------------------
 
 ### **County Cases over Time**
